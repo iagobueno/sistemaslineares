@@ -82,3 +82,21 @@ void retroS(SistLinear_t *SL, real_t *x){
 void liberaVetor(real_t *x){
     free(x);
 }
+
+SistLinear_t *copiaMatriz(SistLinear_t *SL){
+    SistLinear_t *SL2 = alocaSistLinear(SL->n);
+
+    SL2->n = SL->n;
+    SL2->erro = SL2->erro;
+
+    int i, j;
+    for(i = 0;i < SL->n;i++){
+        for(j = 0;j < SL->n;j++)
+            SL2->A[i][j] = SL->A[i][j];
+    }
+    
+    for(i = 0;i < SL->n;i++)
+        SL2->b[i] = SL->b[i];
+
+    return SL2;
+}

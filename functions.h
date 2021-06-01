@@ -24,4 +24,6 @@ void retroS(SistLinear_t *SL, real_t *x);
 /*libera um vetor solução*/
 void liberaVetor(real_t *x);
 
+SistLinear_t *copiaMatriz(SistLinear_t *SL);
+
 #endif

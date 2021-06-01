@@ -8,7 +8,7 @@
 
 int main(){
 
-    SistLinear_t *SL;
+    SistLinear_t *SL, *SL2;
 
     while(1){
         double *t;
@@ -18,12 +18,14 @@ int main(){
         printf("SISTEMA:\n");
         prnSistLinear(SL);
 
-        if(eliminacaoGauss(SL, X, t)){
+        SL2 = copiaMatriz(SL);
+
+        if(eliminacaoGauss(SL2, X, t)){
             perror("erro eliminacao gaus");
         }
 
-        printf("GAUS:\n");
-        prnSistLinear(SL);
+        printf("MATRIZ 2:\n");
+        prnSistLinear(SL2);
 
         printf("X:\n");
         prnVetor(X, SL->n);
