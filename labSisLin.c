@@ -15,8 +15,10 @@ int main(){
         SL = lerSistLinear();
         real_t *X = alocaVetor(SL->n);
 
-        printf("SISTEMA:\n");
-        prnSistLinear(SL);
+        // printf("SISTEMA:");
+        // pulaLinha(2);
+        // prnSistLinear(SL);
+        // pulaLinha(1);
 
         SL2 = copiaMatriz(SL);
 
@@ -24,12 +26,28 @@ int main(){
             perror("erro eliminacao gaus");
         }
 
-        printf("MATRIZ 2:\n");
-        prnSistLinear(SL2);
+        // printf("MATRIZ GAUSS:");
+        // pulaLinha(2);
+        // prnSistLinear(SL2);
+        // pulaLinha(1);
 
-        printf("X:\n");
-        prnVetor(X, SL->n);
+        printf("GAUSS JORDAN:");
+        pulaLinha(1);
+        prnVetor(X, SL2->n);
+        pulaLinha(2);
 
+        gaussJacobi(SL, X, t);
+        // printf("GAUSS JACOBI:");
+        // pulaLinha(1);
+        // prnVetor(X, SL2->n);
+
+
+        gaussSeidel(SL, X, t);
+        printf("GAUSS SEIDEL:");
+        pulaLinha(1);
+        prnVetor(X, SL2->n);
+
+        liberaSistLinear(SL2);
         liberaSistLinear(SL);
         liberaVetor(X);
     }

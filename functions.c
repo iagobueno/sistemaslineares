@@ -81,6 +81,7 @@ void retroS(SistLinear_t *SL, real_t *x){
 
 void liberaVetor(real_t *x){
     free(x);
+    x = NULL;
 }
 
 SistLinear_t *copiaMatriz(SistLinear_t *SL){
@@ -99,4 +100,10 @@ SistLinear_t *copiaMatriz(SistLinear_t *SL){
         SL2->b[i] = SL->b[i];
 
     return SL2;
+}
+
+void pulaLinha(int n){
+    int i;
+    for(i = 0;i < n; i++)
+        printf("\n");
 }

@@ -29,6 +29,9 @@ purge: clean
 ex: labSisLin
 	-./labSisLin < teste
 
+j: labSisLin
+	-./labSisLin < jacob
+
 debug: labSisLin
 	$(CC) -g $(OBJ) -o debug
 

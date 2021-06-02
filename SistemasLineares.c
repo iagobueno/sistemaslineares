@@ -57,6 +57,8 @@ int eliminacaoGauss(SistLinear_t *SL, real_t *x, double *tTotal)
         }
     }
     retroS(SL, x);
+
+    return 0;
 }
 
 /*!
@@ -73,6 +75,49 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal)
 {
+    //vetor x anterior
+    real_t *y = alocaVetor(SL->n);
+
+    int i, j, k = 1;
+    /*calcula solucao inicial*/
+    for(i = 0; i < SL->n; i++)
+        y[i] = 0;
+
+    // printf("Y[0]:\n");
+    // prnVetor(y, SL->n);
+
+    real_t diffmax = SL->erro;
+    for( k = 0; diffmax >= SL->erro && k < MAXIT; k++){
+        
+        /*calcula proximo vetor solucao*/
+        for(i = 0; i < SL->n; i++){
+
+            double num = 0;
+            for(j = 0; j < SL->n; j++){
+                if( i != j)
+                    num += SL->A[i][j] * y[j];
+            }
+
+            x[i] = ( SL->b[i] - num  ) / SL->A[i][i];
+        }
+        //salva vetor atual no anterior para calcular o proximo
+        //e calcula a diferenca
+        real_t diff;
+        diffmax = x[0] - y[0];
+        for(i = 0; i < SL->n; i++){
+            diff = x[i] - y[i];
+            if( diffmax < diff)
+                diffmax = diff;
+            y[i] = x[i];
+        }
+
+        // printf("Erro: %f", diffmax);
+        // pulaLinha(2);
+
+        // printf("Y[%d]:\n", k);
+        // prnVetor(y, SL->n);
+
+    }
 }
 
 /*!
@@ -89,6 +134,52 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal)
 {
+    //vetor x anterior
+    real_t *y = alocaVetor(SL->n);
+
+    int i, j, k = 1;
+    /*calcula solucao inicial*/
+    for(i = 0; i < SL->n; i++)
+        x[i] = 0;
+
+    // printf("Y[0]:\n");
+    // prnVetor(y, SL->n);
+
+    real_t diffmax = SL->erro;
+    for( k = 0; diffmax >= SL->erro && k < MAXIT; k++){
+
+        for(i = 0; i < SL->n; i++)
+            y[i] = x[i];
+        
+        /*calcula proximo vetor solucao*/
+        for(i = 0; i < SL->n; i++){
+
+            double num = 0;
+            for(j = 0; j < SL->n; j++){
+                if( i != j)
+                    num += SL->A[i][j] * x[j];
+            }
+
+            x[i] = ( SL->b[i] - num  ) / SL->A[i][i];
+        }
+        //salva vetor atual no anterior para calcular o proximo
+        //e calcula a diferenca
+        real_t diff;
+        diffmax = x[0] - y[0];
+        for(i = 0; i < SL->n; i++){
+            diff = x[i] - y[i];
+            if( diffmax < diff)
+                diffmax = diff;
+            y[i] = x[i];
+        }
+
+         printf("Erro: %f", diffmax);
+         pulaLinha(2);
+
+         printf("Y[%d]:\n", k);
+         prnVetor(x, SL->n);
+
+    }
 }
 
 /*!
@@ -135,10 +226,16 @@ SistLinear_t *alocaSistLinear(unsigned int n)
 void liberaSistLinear(SistLinear_t *SL)
 {
     free(SL->b);
+    SL->b = NULL;
 
     free(SL->A[0]);
+    SL->A = NULL;
+
     free(SL->A);
+    SL->A = NULL;
+
     free(SL);
+    SL = NULL;
 }
 
 /*!

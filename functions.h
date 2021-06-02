@@ -26,4 +26,6 @@ void liberaVetor(real_t *x);
 
 SistLinear_t *copiaMatriz(SistLinear_t *SL);
 
+void pulaLinha(int n);
+
 #endif
