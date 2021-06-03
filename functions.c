@@ -42,7 +42,7 @@ real_t *alocaVetor(int n){
 int encontraMaior(SistLinear_t *SL, int i){
     int j, max = i;
     for(j = i+1; j < SL->n; j++){
-               if(SL->A[j][i] > SL->A[max][i])
+               if(fabs(SL->A[j][i]) > fabs(SL->A[max][i]))
                     max = j;
     }
     return max;
@@ -157,7 +157,7 @@ void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal){
     SL3 = copiaMatriz(SL);
     int k = refinamento(SL3, X, tTotal);
 
-    printf("===> Refinamento: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
+    printf("===> Refinamento: %f ms --> %d iteracoes\n--> X: ", *tTotal, k);
     prnVetor(X, SL->n);
 
     R = residuo(SL, X);

@@ -22,7 +22,6 @@ real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res){
         r += pow(res[i], 2.0);
     }
     return sqrt(r);
-
 }
 
 /*!
@@ -36,6 +35,7 @@ real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res){
 */
 int eliminacaoGauss(SistLinear_t *SL, real_t *x, double *tTotal){
     //percorre as linhas da matriz
+    double tempo = timestamp();
     int i;
     for(i = 0; i < (SL->n); i++){
 
@@ -63,6 +63,7 @@ int eliminacaoGauss(SistLinear_t *SL, real_t *x, double *tTotal){
     }
     retroS(SL, x);
 
+    *tTotal = timestamp() - tempo;
     return 0;
 }
 
@@ -79,9 +80,9 @@ de iterações realizadas. Um nr. negativo indica um erro:
 -1 (não converge) -2 (sem solução)
 */
 int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal){
-
-    // if(!critDeConvergencia(SL))
-    //     return -1;
+    double tempo = timestamp();
+    if(!critDeConvergencia(SL))
+        return -1;
 
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
@@ -121,6 +122,7 @@ int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal){
 
     }
     liberaVetor(y);
+    *tTotal = timestamp() - tempo;
 
     return k;
 }
@@ -138,9 +140,10 @@ de iterações realizadas. Um nr. negativo indica um erro:
 -1 (não converge) -2 (sem solução)
 */
 int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
+    double tempo = timestamp();
 
-    // if(!critDeConvergencia(SL))
-    //     return -1;
+    if(!critDeConvergencia(SL))
+        return -1;
 
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
@@ -185,6 +188,8 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
     }
 
     liberaVetor(y);
+    *tTotal = timestamp() - tempo;
+
     return k;
 }
 
@@ -201,6 +206,8 @@ de iterações realizadas. Um nr. negativo indica um erro:
 -1 (não converge) -2 (sem solução)
 */
 int refinamento(SistLinear_t *SL, real_t *x, double *tTotal){
+    double tempo = timestamp();
+    
     real_t *R, *w = alocaVetor(SL->n);
     R = residuo(SL, x);
 
@@ -227,6 +234,7 @@ int refinamento(SistLinear_t *SL, real_t *x, double *tTotal){
         liberaSistLinear(SL2);  
     }
     liberaVetor(w);
+    *tTotal = timestamp() - tempo;
 
     return i;
 }
