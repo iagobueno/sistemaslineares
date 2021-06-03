@@ -26,17 +26,5 @@ clean:
 purge: clean
 	-rm -f labSisLin
 
-ex: labSisLin
+run: labSisLin
 	-./labSisLin < sistemas.dat
-
-j: labSisLin
-	-./labSisLin < jacob
-
-re: labSisLin
-	-./labSisLin < residuo	
-
-debug: labSisLin
-	$(CC) $(OBJ) -o debug $(LIBS)
-
-gdb: debug
-	gdb ./labSisLin
