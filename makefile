@@ -32,6 +32,9 @@ ex: labSisLin
 j: labSisLin
 	-./labSisLin < jacob
 
+re: labSisLin
+	-./labSisLin < residuo	
+
 debug: labSisLin
 	$(CC) -g $(OBJ) -o debug
 

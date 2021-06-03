@@ -19,9 +19,9 @@ real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res)
 {
     res = residuo(SL, x);
     int i;
-    real_t r = 0;
+    real_t r = 0.0;
     for(i = 0; i < (SL->n); i++){
-        r += res[i]*res[i];
+        r += pow(res[i], 2.0);
     }
     return sqrt(r);
 
@@ -86,7 +86,7 @@ int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal)
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
 
-    int i, j, k = 1;
+    int i, j, k;
     /*calcula solucao inicial*/
     for(i = 0; i < SL->n; i++)
         y[i] = 0;
@@ -111,23 +111,17 @@ int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal)
         //salva vetor atual no anterior para calcular o proximo
         //e calcula a diferenca
         real_t diff;
-        diffmax = x[0] - y[0];
         for(i = 0; i < SL->n; i++){
-            diff = x[i] - y[i];
+            diff = fabs(x[i] - y[i]);
             if( diffmax < diff)
                 diffmax = diff;
             y[i] = x[i];
         }
 
-        // printf("Erro: %f", diffmax);
-        // pulaLinha(2);
-
-        // printf("Y[%d]:\n", k);
-        // prnVetor(y, SL->n);
-
     }
-
     liberaVetor(y);
+
+    return k;
 }
 
 /*!
@@ -175,23 +169,18 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal)
         //salva vetor atual no anterior para calcular o proximo
         //e calcula a diferenca
         real_t diff;
-        diffmax = x[0] - y[0];
+
         for(i = 0; i < SL->n; i++){
-            diff = x[i] - y[i];
+            diff = fabs(x[i] - y[i]);
             if( diffmax < diff)
                 diffmax = diff;
             y[i] = x[i];
         }
 
-        //  printf("Erro: %f", diffmax);
-        //  pulaLinha(2);
-
-        //  printf("Y[%d]:\n", k);
-        //  prnVetor(x, SL->n);
-
     }
 
     liberaVetor(y);
+    return k;
 }
 
 /*!
@@ -208,25 +197,34 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int refinamento(SistLinear_t *SL, real_t *x, double *tTotal)
 {
-    real_t *R;
+    real_t *R, *w;
+
+
 
     int i;
     for(i=0; i < MAXIT ;i++){
-        if(normaL2Residuo(SL, x, R) < 5)
-            return 0;
-        
+    
+        // 2 - Calcular o resíduo e testar critério de parada(a)
+        if(normaL2Residuo(SL, x, R) < 5.0)
+            return i;
+
+        copiaVetor(SL->b, R, SL->n);
         SistLinear_t *SL2;
         SL2 = copiaMatriz(SL);
-        eliminacaoGauss(SL2, R, tTotal);
-        somaVetor(x, R, SL->n);
 
-        if(normaL2Residuo(SL, x, R) < 5)
-            return 0;
+        // 3 - Obter w resolvendo Aw = r
+        eliminacaoGauss(SL2, w, tTotal);
+
+        // 4 - Obter nova solução e testar critério de parada(b)
+        somaVetor(x, w, SL->n);
+        real_t diff = maxDiff(x , w, SL->n);
+        if( diff < SL->erro )
+            return i;
 
         liberaSistLinear(SL2);  
     }
 
-    return 0;
+    return i;
 }
 
 /*!

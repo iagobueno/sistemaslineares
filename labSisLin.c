@@ -10,7 +10,7 @@ int main(){
 
     SistLinear_t *SL, *SL2;
     real_t *R;
-    int i;
+    int i, k;
     for(i = 1; 1 ; i++){
         double *t;
         SL = lerSistLinear();
@@ -26,23 +26,22 @@ int main(){
 
         printf("===> Eliminação Gauss: %f ms\n--> X: ", 0.0);
         prnVetor(X, SL2->n);
-        L2 = normaL2Residuo(SL2, X, R);
-        //if(L2 < 5)
-        printf("--> Norma L2 do residuo: %f\n", L2);
+        L2 = normaL2Residuo(SL, X, R);
+        printf("--> Norma L2 do residuo: %1.8e\n", L2);
         pulaLinha(1);
 
-        gaussJacobi(SL, X, t);
-        printf("===> Jacobi: %f ms\n--> X: ", 0.0);
-        prnVetor(X, SL2->n);
-        L2 = normaL2Residuo(SL2, X, R);
-        printf("--> Norma L2 do residuo: %f\n", L2);
+        k = gaussJacobi(SL, X, t);
+        printf("===> Jacobi: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
+        prnVetor(X, SL->n);
+        L2 = normaL2Residuo(SL, X, R);
+        printf("--> Norma L2 do residuo: %1.8e\n", L2);
         pulaLinha(1);
 
-        gaussSeidel(SL, X, t);
-        printf("===> Gauss-Seidel: %f ms\n--> X: ", 0.0);
-        prnVetor(X, SL2->n);
-        L2 = normaL2Residuo(SL2, X, R);
-        printf("--> Norma L2 do residuo: %f\n", L2);
+        k = gaussSeidel(SL, X, t);
+        printf("===> Gauss-Seidel: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
+        prnVetor(X, SL->n);
+        L2 = normaL2Residuo(SL, X, R);
+        printf("--> Norma L2 do residuo: %1.8e\n", L2);
         pulaLinha(1);
 
         liberaSistLinear(SL2);

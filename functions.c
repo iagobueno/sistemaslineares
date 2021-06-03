@@ -109,16 +109,17 @@ void pulaLinha(int n){
 }
 
 real_t *residuo(SistLinear_t *SL, real_t *x){
+
     real_t *R = alocaVetor(SL->n);
 
     int i, j;
     for(i = 0; i < SL->n; i++){
         real_t AX = 0;
         for(j = 0; j < SL->n; j++){
-            AX += SL->A[i][j];
+            AX += SL->A[i][j] *x[j];
         }
 
-        R[i] = AX - SL->b[i];
+        R[i] = SL->b[i] - AX;
     }
 
     return R;
@@ -128,4 +129,37 @@ void somaVetor(real_t *a, real_t *b, int n){
     int i;
     for( i = 0; i < n; i ++)
         a[i] += b[i];
+}
+
+void copiaVetor(real_t *a, real_t *b, int n){
+    int i;
+    for( i=0; i < n; i++)
+        a[i] = b[i];
+}
+
+real_t maxDiff(real_t *a, real_t *b, int n){
+    real_t max = b[0] - a[0];
+    int i;
+    for(i = 1; i < n; i++){
+        if( max < (b[i] - a[i]) )
+            max = b[i] - a[i];
+    }
+
+    return max;
+}
+
+void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal){
+    SistLinear_t *SL3;
+    real_t L2, *R;
+
+    SL3 = copiaMatriz(SL);
+    int k = refinamento(SL3, X, tTotal);
+
+    printf("===> Refinamento: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
+    prnVetor(X, SL->n);
+    L2 = normaL2Residuo(SL, X, R);
+    printf("--> Norma L2 do residuo: %1.8e\n", L2);
+    pulaLinha(1);
+
+    liberaSistLinear(SL3);
 }

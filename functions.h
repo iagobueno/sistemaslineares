@@ -32,4 +32,10 @@ real_t *residuo(SistLinear_t *SL, real_t *x);
 
 void somaVetor(real_t *a, real_t *b, int n);
 
+void copiaVetor(real_t *a, real_t *b, int n);
+
+real_t maxDiff(real_t *a, real_t *b, int n);
+
+void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal);
+
 #endif
