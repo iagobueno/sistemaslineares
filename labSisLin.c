@@ -9,43 +9,41 @@
 int main(){
 
     SistLinear_t *SL, *SL2;
-
-    while(1){
+    real_t *R;
+    int i;
+    for(i = 1; 1 ; i++){
         double *t;
         SL = lerSistLinear();
-        real_t *X = alocaVetor(SL->n);
+        real_t L2, *X = alocaVetor(SL->n);
 
-        // printf("SISTEMA:");
-        // pulaLinha(2);
-        // prnSistLinear(SL);
-        // pulaLinha(1);
+        printf("***** Sistema %d --> n = %d, erro: %f\n", i, SL->n, SL->erro);
 
+        //copio a sistema linear para manter os meus coeficientes originais
         SL2 = copiaMatriz(SL);
-
         if(eliminacaoGauss(SL2, X, t)){
             perror("erro eliminacao gaus");
         }
 
-        // printf("MATRIZ GAUSS:");
-        // pulaLinha(2);
-        // prnSistLinear(SL2);
-        // pulaLinha(1);
-
-        printf("GAUSS JORDAN:");
-        pulaLinha(1);
+        printf("===> Eliminação Gauss: %f ms\n--> X: ", 0.0);
         prnVetor(X, SL2->n);
-        pulaLinha(2);
+        L2 = normaL2Residuo(SL2, X, R);
+        //if(L2 < 5)
+        printf("--> Norma L2 do residuo: %f\n", L2);
+        pulaLinha(1);
 
         gaussJacobi(SL, X, t);
-        // printf("GAUSS JACOBI:");
-        // pulaLinha(1);
-        // prnVetor(X, SL2->n);
-
+        printf("===> Jacobi: %f ms\n--> X: ", 0.0);
+        prnVetor(X, SL2->n);
+        L2 = normaL2Residuo(SL2, X, R);
+        printf("--> Norma L2 do residuo: %f\n", L2);
+        pulaLinha(1);
 
         gaussSeidel(SL, X, t);
-        printf("GAUSS SEIDEL:");
-        pulaLinha(1);
+        printf("===> Gauss-Seidel: %f ms\n--> X: ", 0.0);
         prnVetor(X, SL2->n);
+        L2 = normaL2Residuo(SL2, X, R);
+        printf("--> Norma L2 do residuo: %f\n", L2);
+        pulaLinha(1);
 
         liberaSistLinear(SL2);
         liberaSistLinear(SL);

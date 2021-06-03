@@ -17,6 +17,14 @@
 */
 real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res)
 {
+    res = residuo(SL, x);
+    int i;
+    real_t r = 0;
+    for(i = 0; i < (SL->n); i++){
+        r += res[i]*res[i];
+    }
+    return sqrt(r);
+
 }
 
 /*!
@@ -118,6 +126,8 @@ int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal)
         // prnVetor(y, SL->n);
 
     }
+
+    liberaVetor(y);
 }
 
 /*!
@@ -173,13 +183,15 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal)
             y[i] = x[i];
         }
 
-         printf("Erro: %f", diffmax);
-         pulaLinha(2);
+        //  printf("Erro: %f", diffmax);
+        //  pulaLinha(2);
 
-         printf("Y[%d]:\n", k);
-         prnVetor(x, SL->n);
+        //  printf("Y[%d]:\n", k);
+        //  prnVetor(x, SL->n);
 
     }
+
+    liberaVetor(y);
 }
 
 /*!
@@ -196,6 +208,25 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int refinamento(SistLinear_t *SL, real_t *x, double *tTotal)
 {
+    real_t *R;
+
+    int i;
+    for(i=0; i < MAXIT ;i++){
+        if(normaL2Residuo(SL, x, R) < 5)
+            return 0;
+        
+        SistLinear_t *SL2;
+        SL2 = copiaMatriz(SL);
+        eliminacaoGauss(SL2, R, tTotal);
+        somaVetor(x, R, SL->n);
+
+        if(normaL2Residuo(SL, x, R) < 5)
+            return 0;
+
+        liberaSistLinear(SL2);  
+    }
+
+    return 0;
 }
 
 /*!

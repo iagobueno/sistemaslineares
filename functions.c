@@ -107,3 +107,25 @@ void pulaLinha(int n){
     for(i = 0;i < n; i++)
         printf("\n");
 }
+
+real_t *residuo(SistLinear_t *SL, real_t *x){
+    real_t *R = alocaVetor(SL->n);
+
+    int i, j;
+    for(i = 0; i < SL->n; i++){
+        real_t AX = 0;
+        for(j = 0; j < SL->n; j++){
+            AX += SL->A[i][j];
+        }
+
+        R[i] = AX - SL->b[i];
+    }
+
+    return R;
+}
+
+void somaVetor(real_t *a, real_t *b, int n){
+    int i;
+    for( i = 0; i < n; i ++)
+        a[i] += b[i];
+}

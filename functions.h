@@ -28,4 +28,8 @@ SistLinear_t *copiaMatriz(SistLinear_t *SL);
 
 void pulaLinha(int n);
 
+real_t *residuo(SistLinear_t *SL, real_t *x);
+
+void somaVetor(real_t *a, real_t *b, int n);
+
 #endif
