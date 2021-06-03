@@ -26,23 +26,38 @@ int main(){
 
         printf("===> Eliminação Gauss: %f ms\n--> X: ", 0.0);
         prnVetor(X, SL2->n);
+        R = residuo(SL, X);
         L2 = normaL2Residuo(SL, X, R);
         printf("--> Norma L2 do residuo: %1.8e\n", L2);
         pulaLinha(1);
+
+        if(L2 > 5.0){
+            chamaRefinamento(SL, X, t);
+        }
 
         k = gaussJacobi(SL, X, t);
         printf("===> Jacobi: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
         prnVetor(X, SL->n);
+        R = residuo(SL, X);
         L2 = normaL2Residuo(SL, X, R);
         printf("--> Norma L2 do residuo: %1.8e\n", L2);
         pulaLinha(1);
 
+        if(L2 > 5.0){
+            chamaRefinamento(SL, X, t);
+        }
+
         k = gaussSeidel(SL, X, t);
         printf("===> Gauss-Seidel: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
         prnVetor(X, SL->n);
+        R = residuo(SL, X);
         L2 = normaL2Residuo(SL, X, R);
         printf("--> Norma L2 do residuo: %1.8e\n", L2);
         pulaLinha(1);
+
+        if(L2 > 5.0){
+            chamaRefinamento(SL, X, t);
+        }
 
         liberaSistLinear(SL2);
         liberaSistLinear(SL);

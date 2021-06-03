@@ -17,7 +17,6 @@
 */
 real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res)
 {
-    res = residuo(SL, x);
     int i;
     real_t r = 0.0;
     for(i = 0; i < (SL->n); i++){
@@ -197,9 +196,8 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int refinamento(SistLinear_t *SL, real_t *x, double *tTotal)
 {
-    real_t *R, *w;
-
-
+    real_t *R, *w = alocaVetor(SL->n);
+    R = residuo(SL, x);
 
     int i;
     for(i=0; i < MAXIT ;i++){
@@ -223,6 +221,7 @@ int refinamento(SistLinear_t *SL, real_t *x, double *tTotal)
 
         liberaSistLinear(SL2);  
     }
+    liberaVetor(w);
 
     return i;
 }

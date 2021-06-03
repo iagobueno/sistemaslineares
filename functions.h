@@ -26,16 +26,22 @@ void liberaVetor(real_t *x);
 
 SistLinear_t *copiaMatriz(SistLinear_t *SL);
 
+/*da printf \n, n vezes*/
 void pulaLinha(int n);
 
+/*calcula o residuo*/
 real_t *residuo(SistLinear_t *SL, real_t *x);
 
+/*soma a + b em a*/
 void somaVetor(real_t *a, real_t *b, int n);
 
+/*copia a em b*/
 void copiaVetor(real_t *a, real_t *b, int n);
 
+/*calcula a diferenca maxima entre os elementos de um vetor a e b*/
 real_t maxDiff(real_t *a, real_t *b, int n);
 
+/*chama a funcao refinamento na main*/
 void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal);
 
 #endif

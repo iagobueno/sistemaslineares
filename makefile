@@ -1,5 +1,5 @@
 #GRR20190171 Carlos Iago Bueno
-CC = gcc
+CC = gcc -g
 CFLAGS = -I
 DEPS = functions.h
 OBJ = labSisLin.o SistemasLineares.o utils.o functions.o
@@ -27,7 +27,7 @@ purge: clean
 	-rm -f labSisLin
 
 ex: labSisLin
-	-./labSisLin < teste
+	-./labSisLin < sistemas.dat
 
 j: labSisLin
 	-./labSisLin < jacob
@@ -36,7 +36,7 @@ re: labSisLin
 	-./labSisLin < residuo	
 
 debug: labSisLin
-	$(CC) -g $(OBJ) -o debug
+	$(CC) $(OBJ) -o debug $(LIBS)
 
 gdb: debug
 	gdb ./labSisLin

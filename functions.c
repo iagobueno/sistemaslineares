@@ -157,6 +157,8 @@ void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal){
 
     printf("===> Refinamento: %f ms --> %d iteracoes\n--> X: ", 0.0, k);
     prnVetor(X, SL->n);
+
+    R = residuo(SL, X);
     L2 = normaL2Residuo(SL, X, R);
     printf("--> Norma L2 do residuo: %1.8e\n", L2);
     pulaLinha(1);
