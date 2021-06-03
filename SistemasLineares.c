@@ -80,8 +80,8 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal){
 
-    if(!critDeConvergencia(SL))
-        return -1;
+    // if(!critDeConvergencia(SL))
+    //     return -1;
 
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
@@ -111,6 +111,7 @@ int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal){
         //salva vetor atual no anterior para calcular o proximo
         //e calcula a diferenca
         real_t diff;
+        diffmax = fabs(x[i] - y[i]);
         for(i = 0; i < SL->n; i++){
             diff = fabs(x[i] - y[i]);
             if( diffmax < diff)
@@ -138,8 +139,8 @@ de iterações realizadas. Um nr. negativo indica um erro:
 */
 int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
 
-    if(!critDeConvergencia(SL))
-        return -1;
+    // if(!critDeConvergencia(SL))
+    //     return -1;
 
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
@@ -147,7 +148,7 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
     int i, j, k = 1;
     /*calcula solucao inicial*/
     for(i = 0; i < SL->n; i++)
-        x[i] = 0;
+        x[i] = 0.0;
 
     // printf("Y[0]:\n");
     // prnVetor(y, SL->n);
@@ -155,13 +156,13 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
     real_t diffmax = SL->erro;
     for( k = 0; diffmax >= SL->erro && k < MAXIT; k++){
 
-        for(i = 0; i < SL->n; i++)
-            y[i] = x[i];
+        // for(i = 0; i < SL->n; i++)
+        //     y[i] = x[i];
         
         /*calcula proximo vetor solucao*/
         for(i = 0; i < SL->n; i++){
 
-            double num = 0;
+            double num = 0.0;
             for(j = 0; j < SL->n; j++){
                 if( i != j)
                     num += SL->A[i][j] * x[j];
@@ -173,6 +174,7 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
         //e calcula a diferenca
         real_t diff;
 
+        diffmax = fabs(x[i] - y[i]);
         for(i = 0; i < SL->n; i++){
             diff = fabs(x[i] - y[i]);
             if( diffmax < diff)

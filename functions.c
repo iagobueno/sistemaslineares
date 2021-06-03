@@ -176,7 +176,8 @@ int critDeConvergencia(SistLinear_t *SL){
         soma = 0.0;
         //soma todos os elementos da linha
         for(j = 0; j < SL-> n; j++){
-            soma += fabs( SL->A[i][j] );
+            if(i!=j)
+                soma += fabs( SL->A[i][j] );
         }
 
         //divide pelo pivo
