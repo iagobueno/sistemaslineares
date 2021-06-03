@@ -44,4 +44,7 @@ real_t maxDiff(real_t *a, real_t *b, int n);
 /*chama a funcao refinamento na main*/
 void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal);
 
+/*checa se as solucoes iterativas convergem para a solucao do sistema*/
+int critDeConvergencia(SistLinear_t *SL);
+
 #endif

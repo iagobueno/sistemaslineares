@@ -15,8 +15,7 @@
 
 \return Norma L2 do resíduo.
 */
-real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res)
-{
+real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res){
     int i;
     real_t r = 0.0;
     for(i = 0; i < (SL->n); i++){
@@ -35,8 +34,7 @@ real_t normaL2Residuo(SistLinear_t *SL, real_t *x, real_t *res)
 
 \return código de erro. 0 em caso de sucesso.
 */
-int eliminacaoGauss(SistLinear_t *SL, real_t *x, double *tTotal)
-{
+int eliminacaoGauss(SistLinear_t *SL, real_t *x, double *tTotal){
     //percorre as linhas da matriz
     int i;
     for(i = 0; i < (SL->n); i++){
@@ -80,8 +78,11 @@ int eliminacaoGauss(SistLinear_t *SL, real_t *x, double *tTotal)
 de iterações realizadas. Um nr. negativo indica um erro:
 -1 (não converge) -2 (sem solução)
 */
-int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal)
-{
+int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal){
+
+    if(!critDeConvergencia(SL))
+        return -1;
+
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
 
@@ -135,8 +136,11 @@ int gaussJacobi(SistLinear_t *SL, real_t *x, double *tTotal)
 de iterações realizadas. Um nr. negativo indica um erro:
 -1 (não converge) -2 (sem solução)
 */
-int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal)
-{
+int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal){
+
+    if(!critDeConvergencia(SL))
+        return -1;
+
     //vetor x anterior
     real_t *y = alocaVetor(SL->n);
 
@@ -194,8 +198,7 @@ int gaussSeidel(SistLinear_t *SL, real_t *x, double *tTotal)
 de iterações realizadas. Um nr. negativo indica um erro:
 -1 (não converge) -2 (sem solução)
 */
-int refinamento(SistLinear_t *SL, real_t *x, double *tTotal)
-{
+int refinamento(SistLinear_t *SL, real_t *x, double *tTotal){
     real_t *R, *w = alocaVetor(SL->n);
     R = residuo(SL, x);
 
@@ -233,8 +236,7 @@ int refinamento(SistLinear_t *SL, real_t *x, double *tTotal)
 
 \return ponteiro para SL. NULL se houve erro de alocação
 */
-SistLinear_t *alocaSistLinear(unsigned int n)
-{
+SistLinear_t *alocaSistLinear(unsigned int n){
     SistLinear_t *SL = malloc ( sizeof(SistLinear_t));
     testaMalloc(SL);
 
@@ -251,8 +253,7 @@ SistLinear_t *alocaSistLinear(unsigned int n)
 
 \param sistema linear SL
 */
-void liberaSistLinear(SistLinear_t *SL)
-{
+void liberaSistLinear(SistLinear_t *SL){
     free(SL->b);
     SL->b = NULL;
 
@@ -271,8 +272,7 @@ void liberaSistLinear(SistLinear_t *SL)
 
 \return sistema linear SL. NULL se houve erro (leitura ou alocação)
 */
-SistLinear_t *lerSistLinear()
-{
+SistLinear_t *lerSistLinear(){
     int n, fim;
     real_t erro;
 
@@ -297,8 +297,7 @@ SistLinear_t *lerSistLinear()
 }
 
 // Exibe SL na saída padrão
-void prnSistLinear(SistLinear_t *SL)
-{
+void prnSistLinear(SistLinear_t *SL){
     int i, j;
     for(i = 0; i < SL->n; i++){
         for(j = 0; j < SL->n; j++)
@@ -308,8 +307,7 @@ void prnSistLinear(SistLinear_t *SL)
 }
 
 // Exibe um vetor na saída padrão
-void prnVetor(real_t *v, unsigned int n)
-{
+void prnVetor(real_t *v, unsigned int n){
     int i;
     for(i = 0; i < n; i++){
         printf("%f ", v[i]);

@@ -2,6 +2,7 @@
 #include "functions.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 //testa se a alocacao dinamica deu certo
 void testaMalloc(void *t){
@@ -80,6 +81,7 @@ void retroS(SistLinear_t *SL, real_t *x){
 }
 
 void liberaVetor(real_t *x){
+    //libera o vetor e nulifica os ponteiros
     free(x);
     x = NULL;
 }
@@ -164,4 +166,27 @@ void chamaRefinamento(SistLinear_t *SL, real_t *X, double *tTotal){
     pulaLinha(1);
 
     liberaSistLinear(SL3);
+}
+
+int critDeConvergencia(SistLinear_t *SL){
+    int i, j;
+    real_t soma, max = 0.0;
+    for(i = 0; i < SL->n; i++){
+
+        soma = 0.0;
+        //soma todos os elementos da linha
+        for(j = 0; j < SL-> n; j++){
+            soma += fabs( SL->A[i][j] );
+        }
+
+        //divide pelo pivo
+        soma /= fabs(SL->A[i][i]);
+        if( soma > max)
+            max = soma;
+    }
+
+    // alfa = max(alfai) < 1
+    if( max > 1.0)
+        return 0;
+    return 1;
 }
